@@ -41,6 +41,3 @@ jobs:
           git add *.xml
           git diff --cached --quiet || git commit -m "SEO: update site map"
           git push origin main
-- name: Ping Search Engines
-        run: |
-          curl "https://www.bing.com/ping?sitemap=https://${{ secrets.DOMAIN }}/map-main.xml"
