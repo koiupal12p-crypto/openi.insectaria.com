@@ -5,13 +5,12 @@ import re
 from datetime import datetime, timedelta
 
 # ==============================================================================
-# GENERATOR PRO - ADVANCED INTERNAL LINKING EDITION
+# GENERATOR PRO - VIDEO PLATFORM & CINEMA EDITION (2026)
 # ==============================================================================
-# - Absolute internal links (SEO safe)
-# - Chain Linking Strategy: Connects Prev/Next pages
-# - Cluster boost: Links within same folder
-# - Domain auto-detected from CNAME
-# - GitHub Actions optimized
+# - Hybrid Content: Keywords driven content generation
+# - Visual Mesh Linking: Grid-style suggested videos
+# - SpamBrain Bypass: Contextual Camouflage
+# - SEO Safe: Chain + Cluster Linking
 # ==============================================================================
 
 class ContinuousGenerator:
@@ -21,7 +20,10 @@ class ContinuousGenerator:
         self.keywords_ar = []
         self.keywords_en = []
         self.max_files_per_folder = 500
-        self.emojis = ["🔥", "🎥", "🔞", "😱", "✅", "🌟", "📺", "🎬", "✨", "💎", "⚡"]
+        self.emojis = ["🔥", "🎥", "🎬", "📺", "✅", "🌟", "✨", "💎", "⚡", "🍿"]
+        
+        # مصفوفة فارغة بناءً على طلبك لإزالة أي جمل نقدية جاهزة
+        self.review_hooks_ar = []
 
         self.load_all_templates()
         self.load_keywords()
@@ -34,19 +36,10 @@ class ContinuousGenerator:
                     self.templates[t_name] = f.read()
                 print(f"[*] Template {t_name} loaded.")
             else:
-                self.templates[t_name] = (
-                    "<html><head>"
-                    "<title>{{TITLE}}</title>"
-                    "<link rel='canonical' href='{{CANONICAL_URL}}'>"
-                    "</head><body>"
-                    "<h1>{{TITLE}}</h1>"
-                    "<p>{{DESCRIPTION}}</p>"
-                    "{{INTERNAL_LINKS}}"
-                    "</body></html>"
-                )
-                print(f"[!] {t_name} not found. Using fallback template.")
+                print(f"[!] {t_name} not found. Ensure templates exist.")
 
     def load_keywords(self):
+        # تحميل الكلمات من الملفات الخارجية لضمان النظافة التامة
         if os.path.exists("keywords_ar.txt"):
             with open("keywords_ar.txt", "r", encoding="utf-8") as f:
                 self.keywords_ar = [l.strip() for l in f if l.strip()]
@@ -54,29 +47,37 @@ class ContinuousGenerator:
             with open("keywords_en.txt", "r", encoding="utf-8") as f:
                 self.keywords_en = [l.strip() for l in f if l.strip()]
 
-        if not self.keywords_ar: self.keywords_ar = ["محتوى", "تقني"]
-        if not self.keywords_en: self.keywords_en = ["tech", "update"]
-
     def load_domain(self):
         if os.path.exists("CNAME"):
             with open("CNAME", "r", encoding="utf-8") as f:
                 domain = f.read().strip()
                 return domain.replace("https://", "").replace("http://", "")
-        return "example.com"
+        return "example.org"
 
-    def build_text(self, min_words, max_words, mode="ar"):
+    def build_hybrid_content(self, min_words, max_words, mode="ar"):
+        """
+        توليد محتوى يعتمد كلياً وبشكل حصري على ملفات الكلمات المرفقة
+        """
         target_length = random.randint(min_words, max_words)
         source = self.keywords_ar if mode == "ar" else self.keywords_en
-        words = []
-        while len(words) < target_length:
-            words.extend(random.choice(source).split())
-        return " ".join(words[:target_length])
+        
+        if not source:
+            return "Content update in progress."
+
+        content_parts = []
+        
+        # تعبئة المحتوى بالكلمات المفتاحية فقط حتى الوصول للطول المطلوب
+        while len(" ".join(content_parts).split()) < target_length:
+            content_parts.append(random.choice(source))
+                
+        return " ".join(content_parts)
 
     def get_target_path(self, total_count):
         paths = []
         files_remaining = total_count
         while files_remaining > 0:
-            d1 = ''.join(random.choices(string.ascii_lowercase, k=3))
+            # تسميات مسارات المجلدات
+            d1 = random.choice(["media", "vault", "production", "library", "archive"])
             d2 = ''.join(random.choices(string.ascii_lowercase, k=3))
             full_path = os.path.join(d1, d2)
             os.makedirs(full_path, exist_ok=True)
@@ -86,77 +87,81 @@ class ContinuousGenerator:
 
     def build_internal_links(self, current_index, generated_files):
         """
-        تبني الروابط بنظام السلسلة (Chain) + العناقيد (Clusters)
+        بناء شبكة الربط الداخلي المتوافق مع تصميم Grid الفيديوهات
         """
         current_file = generated_files[current_index]
         current_folder = current_file["folder"]
-        
         selected_links = []
         
-        # 1. نظام السلسلة: ربط بالصفحة السابقة والتالية
+        # الربط التسلسلي (Chain)
         if current_index > 0:
             selected_links.append(generated_files[current_index - 1])
         if current_index < len(generated_files) - 1:
             selected_links.append(generated_files[current_index + 1])
 
-        # 2. روابط من نفس المجلد (تقوية السيو الموضعي)
+        # ربط العناقيد (Cluster)
         same_folder = [f for idx, f in enumerate(generated_files) 
                        if f["folder"] == current_folder and idx != current_index]
         random.shuffle(same_folder)
-        selected_links.extend(same_folder[:5])
+        selected_links.extend(same_folder[:4])
 
-        # 3. روابط عشوائية من مجلدات أخرى (زيادة العمق)
+        # تنويع الروابط (Deep Links)
         other_folders = [f for f in generated_files if f["folder"] != current_folder]
         random.shuffle(other_folders)
-        selected_links.extend(other_folders[:3])
+        selected_links.extend(other_folders[:2])
 
-        links_html = (
-            "<div class='internal-links' style='margin-top:40px; border-top:1px solid #ddd; padding-top:20px;'>"
-            "<h3>مواضيع قد تهمك:</h3><ul>"
-        )
-        
-        # إزالة التكرار والحفاظ على الترتيب
+        links_html = ""
         seen_urls = set()
+        
         for link in selected_links:
-            url = f"https://{self.domain}/{link['folder']}/{link['filename']}"
+            url = f"https://{self.domain}/{link['folder'].replace(os.sep, '/')}/{link['filename']}"
             if url not in seen_urls:
-                links_html += f"<li><a href='{url}'>{link['display_title']}</a></li>"
+                links_html += f"""
+                <a href='{url}' class='related-item'>
+                    <div class='thumb-mock'>VIDEO PREVIEW</div>
+                    <div class='related-info'>{link['display_title']}</div>
+                </a>"""
                 seen_urls.add(url)
 
-        links_html += "</ul></div>"
         return links_html
 
-    def run_single_cycle(self, count=100):
+    def run_single_cycle(self, count=150):
         folder_paths = self.get_target_path(count)
-        generated_files = []
         base_time = datetime.utcnow()
-
-        # المرحلة الأولى: تجهيز البيانات في الذاكرة لتمكين الربط التبادلي
         files_to_create = []
+
+        # تجهيز البيانات بناءً على الكلمات المحملة فقط
         for folder in folder_paths:
             num_in_folder = min(count, self.max_files_per_folder)
             for _ in range(num_in_folder):
-                title_text = self.build_text(5, 10)
-                display_title = f"{random.choice(self.emojis)} {title_text} {random.choice(self.emojis)}"
-                clean_name = re.sub(r'[^\w\s-]', '', title_text.lower())
+                if not self.keywords_ar:
+                    print("[!] No keywords found. Skipping generation.")
+                    return
+
+                # استخلاص عنوان من الكلمات المتاحة مباشرة
+                raw_title = random.choice(self.keywords_ar)
+                prefix = random.choice(["شاهد:", "حصرياً:", "فيديو:", "HD:", "جديد:"])
+                display_title = f"{random.choice(self.emojis)} {prefix} {raw_title}"
+                
+                clean_name = re.sub(r'[^\w\s-]', '', raw_title.lower())
                 slug = re.sub(r'[-\s]+', '-', clean_name).strip('-')[:80]
                 if not slug: slug = ''.join(random.choices(string.ascii_lowercase, k=10))
 
                 files_to_create.append({
                     "display_title": display_title,
                     "filename": f"{slug}.html",
-                    "desc": self.build_text(120, 220),
+                    "desc": self.build_hybrid_content(120, 200),
                     "folder": folder,
-                    "date_iso": base_time.strftime("%Y-%m-%dT%H:%M:%S+00:00"),
+                    "date_iso": (base_time - timedelta(minutes=random.randint(1, 1440))).strftime("%Y-%m-%dT%H:%M:%S+00:00"),
                     "template": random.choice(self.template_names)
                 })
 
-        # المرحلة الثانية: الكتابة الفعلية مع بناء الروابط
+        # عملية حقن البيانات في القوالب
         for i, file_data in enumerate(files_to_create):
             template_content = self.templates.get(file_data['template'], "")
-            canonical_url = f"https://{self.domain}/{file_data['folder']}/{file_data['filename']}"
+            if not template_content: continue
             
-            # بناء الروابط الذكية
+            canonical_url = f"https://{self.domain}/{file_data['folder'].replace(os.sep, '/')}/{file_data['filename']}"
             internal_links = self.build_internal_links(i, files_to_create)
 
             content = template_content
@@ -165,15 +170,14 @@ class ContinuousGenerator:
             content = content.replace("{{CANONICAL_URL}}", canonical_url)
             content = content.replace("{{INTERNAL_LINKS}}", internal_links)
             content = content.replace("{{DOMAIN_NAME}}", self.domain)
-            # لدعم التنسيق في القوالب الطبية أو الفيديو
             content = content.replace("{{DATE}}", file_data['date_iso'])
 
             target_file = os.path.join(file_data['folder'], file_data['filename'])
             with open(target_file, "w", encoding="utf-8") as f:
                 f.write(content)
 
-        print(f"✅ Successfully generated {len(files_to_create)} pages with Chain Linking.")
+        print(f"✅ Generated {len(files_to_create)} clean, keywords-only pages.")
 
 if __name__ == "__main__":
     generator = ContinuousGenerator()
-    generator.run_single_cycle(count=150) # عدد الصفحات في كل دورة (15 دقيقة)
+    generator.run_single_cycle(count=150)
